@@ -11,10 +11,17 @@ code {
 }
 
 .pos {
+    width: 10%;
     position: absolute;
 }
 
 .input {
     background-color: transparent;
     border: 0px solid;
+    border-width: 0px;
+    border: none;
+}
+
+.EnterName {
+    height: 30px;
 }

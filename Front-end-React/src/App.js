@@ -10,7 +10,9 @@ class App extends Component {
     this.state = {
       response: false,
       endpoint: "http://localhost:3001",
-      itemArray: [1, 2, 3]
+      screenName:'',
+      itemArray: [],
+      msg:''
     }
   }
   componentDidMount() {
@@ -24,16 +26,20 @@ class App extends Component {
     );
   }
   createElement = (event) => {
+    if (event.target.getAttribute('name') === 'screenName'){
+      return
+    }
     console.log("X ===", event.clientX)
     console.log("Y ===", event.clientY)
     const items = this.state.itemArray
     const positionX = event.clientX
     const positionY = event.clientY
-    const name = "test"
+    // const name = "test"
     let posObj = {
       x: positionX,
       y: positionY,
-      name: name
+      name: this.state.screenName === '' ? 'Anonymous' : this.state.screenName,
+      msg:''
     }
     items.push(posObj)
     this.setState({
@@ -42,22 +48,29 @@ class App extends Component {
   }
 
   handleChange = (e) => {
+    let arrtobeimported = this.state.itemArray
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
+      msg: e.target.value
     })
+    if (arrtobeimported.length > 0){
+        arrtobeimported[arrtobeimported.length - 1].msg = this.state.msg
+      }
   }
 
   componentWillMount() {
-    window.addEventListener('click', this.createElement)
+    document.addEventListener('click', this.createElement)
   }
   render() {
     const { response } = this.state;
     return (
       <div className="App">
         <h1>{response ? "CONNECTED" : "NOT CONNECTED"}</h1>
+        <p><input className="EnterName" onChange={this.handleChange} name="screenName" placeholder="Enter Name" value={this.state.screenName}/></p>
         {this.state.itemArray.map((res, index) => {
           if (res.x !== undefined) {
-            return <span className="pos" key={index} style={{ top: res.y, left: res.x }}>{res.name}:<input className="input" autoFocus onChange={this.state.handleChange} name={res.name} /></span>
+            console.log(res.msg)
+            return <span className="pos" key={index} style={{ top: res.y, left: res.x }}>{res.name}:<input className="input" autoFocus onChange={this.handleChange} name={res.name} /></span>
           }
         })}
       </div>
